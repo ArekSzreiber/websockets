@@ -1,12 +1,12 @@
-const socket = new WebSocket('ws://localhost:8080');
+const socket = io('ws://localhost:8080');
 
-// Listen for messages
-socket.onmessage = (message) => {
-    const { data } = message;
-    console.log('Message data from server ', data);
-    console.log('Full message object: ', message);
-};
+socket.on('message', text => {
+    const listItem = document.createElement('li');
+    listItem.innerText = text;
+    document.querySelector('ul').appendChild(listItem);
+});
 
 document.querySelector('button').onclick = () => {
-    socket.send('hello');
-}
+    const text = document.querySelector('input').value;
+    socket.emit('message', text);
+};
